@@ -148,7 +148,7 @@ def test_generate_uses_native_resume_and_exports_jsonl(monkeypatch: pytest.Monke
 
     config = RUN_CONFIGS[0]
     assert config.buffer_size == 37
-    assert config.resume == ResumeMode.ALWAYS.value
+    assert config.resume in (ResumeMode.ALWAYS, ResumeMode.ALWAYS.value)
     assert config.num_records == 3
     assert config.dataset_name == "my_run"
     assert config.output_dir == tmp_path / "out"
