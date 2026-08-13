@@ -52,15 +52,6 @@ def _count_seed_records(seed_source: DocumentChunkerSeedSource) -> int:
     return reader.get_seed_dataset_size()
 
 
-def _path_is_relative_to(path: Path, root: Path) -> bool:
-    """Return whether *path* is contained by *root* after resolution."""
-    try:
-        path.relative_to(root)
-    except ValueError:
-        return False
-    return True
-
-
 def _validate_dataset_name(dataset_name: str, artifact_path: Path) -> str:
     """Validate a Data Designer dataset name used as an artifact path segment."""
     if not dataset_name:
@@ -78,7 +69,7 @@ def _validate_dataset_name(dataset_name: str, artifact_path: Path) -> str:
 
     artifact_root = artifact_path.resolve()
     resolved_dataset_path = (artifact_root / dataset_name).resolve()
-    if resolved_dataset_path == artifact_root or not _path_is_relative_to(resolved_dataset_path, artifact_root):
+    if resolved_dataset_path == artifact_root or not resolved_dataset_path.is_relative_to(artifact_root):
         raise ValueError("--dataset-name must resolve under --artifact-path")
     return dataset_name
 
