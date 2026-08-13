@@ -350,8 +350,9 @@ def _extract_evaluation_scores(qa_evaluations: object) -> list[float]:
     else:
         evaluations_list = getattr(qa_evaluations, "evaluations", [])
 
-    if isinstance(evaluations_list, np.ndarray):
-        evaluations_list = evaluations_list.tolist()
+    evaluations_list = _to_list(evaluations_list)
+    if not isinstance(evaluations_list, list):
+        return scores
 
     for eval_item in evaluations_list:
         if isinstance(eval_item, dict):
