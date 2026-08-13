@@ -364,6 +364,16 @@ def file_tuple_in_set(file_name: object, file_set: set[tuple[str, ...]]) -> bool
     return file_tuple in file_set
 
 
+def _validate_split_ratios(train_ratio: float, val_ratio: float) -> None:
+    """Validate split ratios are within [0, 1] and sum to at most 1."""
+    if not (0.0 <= train_ratio <= 1.0 and 0.0 <= val_ratio <= 1.0):
+        raise ValueError(
+            f"train_ratio ({train_ratio}) and val_ratio ({val_ratio}) must each be between 0.0 and 1.0"
+        )
+    if train_ratio + val_ratio > 1.0:
+        raise ValueError(f"train_ratio ({train_ratio}) + val_ratio ({val_ratio}) must be <= 1.0")
+
+
 def create_train_val_test_split(
     filtered_qa_df: pd.DataFrame,
     train_ratio: float,
@@ -384,11 +394,8 @@ def create_train_val_test_split(
     Raises:
         ValueError: If ``train_ratio + val_ratio > 1.0``.
     """
+    _validate_split_ratios(train_ratio, val_ratio)
     random.seed(seed)
-
-    test_ratio = 1.0 - train_ratio - val_ratio
-    if test_ratio < 0:
-        raise ValueError(f"train_ratio ({train_ratio}) + val_ratio ({val_ratio}) must be <= 1.0")
 
     unique_file_tuples = sorted({tuple(f) if isinstance(f, list) else (f,) for f in filtered_qa_df["file_name"]})
     random.shuffle(unique_file_tuples)
@@ -603,11 +610,10 @@ def create_group_aware_split(
     Raises:
         ValueError: If ``train_ratio + val_ratio > 1.0``.
     """
+    _validate_split_ratios(train_ratio, val_ratio)
     random.seed(seed)
 
     test_ratio = 1.0 - train_ratio - val_ratio
-    if test_ratio < 0:
-        raise ValueError(f"train_ratio ({train_ratio}) + val_ratio ({val_ratio}) must be <= 1.0")
 
     unique_file_tuples = sorted({tuple(f) if isinstance(f, list) else (f,) for f in filtered_qa_df["file_name"]})
 
