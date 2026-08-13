@@ -22,6 +22,10 @@ from data_designer_retrieval_sdg import (
 from data_designer_retrieval_sdg import (
     GenerationRunConfig as PublicGenerationRunConfig,
 )
+from data_designer_retrieval_sdg.pipeline import (
+    DEFAULT_CHAT_MODEL,
+    DEFAULT_EMBED_MODEL,
+)
 from data_designer_retrieval_sdg.run_config import (
     ConversionRunConfig,
     GenerationPipelineConfig,
@@ -46,10 +50,10 @@ def test_generation_pipeline_config_has_canonical_defaults() -> None:
     assert config.min_hops == 1
     assert config.max_hops == 3
     assert config.min_complexity == 2
-    assert config.artifact_extraction_model == "nvidia/nemotron-3-ultra-550b-a55b"
-    assert config.qa_generation_model == "nvidia/nemotron-3-ultra-550b-a55b"
-    assert config.quality_judge_model == "nvidia/nemotron-3-ultra-550b-a55b"
-    assert config.embed_model == "nvidia/nemotron-3-embed-1b"
+    assert config.artifact_extraction_model == DEFAULT_CHAT_MODEL
+    assert config.qa_generation_model == DEFAULT_CHAT_MODEL
+    assert config.quality_judge_model == DEFAULT_CHAT_MODEL
+    assert config.embed_model == DEFAULT_EMBED_MODEL
 
 
 def test_generation_configs_reject_unknown_fields_and_schema_versions(tmp_path: Path) -> None:
@@ -203,7 +207,7 @@ def test_pydantic_defaults_are_complete_and_validate() -> None:
     assert generation.config.seed_source.file_extensions == [".txt", ".md", ".text"]
     assert generation.config.output_dir == Path("generated")
     assert generation.config.pipeline.num_pairs == 7
-    assert generation.config.pipeline.embed_model == "nvidia/nemotron-3-embed-1b"
+    assert generation.config.pipeline.embed_model == DEFAULT_EMBED_MODEL
     assert generation.sources == ()
     assert generation.override_paths == ()
 
