@@ -53,6 +53,24 @@ NonNegativeInt = Annotated[int, Field(ge=0)]
 _QUERY_COUNT_KEYS = frozenset(DEFAULT_QUERY_COUNTS)
 _REASONING_COUNT_KEYS = frozenset(DEFAULT_REASONING_COUNTS)
 RunConfigT = TypeVar("RunConfigT", bound=ConfigBase)
+_EXACT_SENSITIVE_KEYS = frozenset({
+    "access_token",
+    "api_key",
+    "apikey",
+    "authorization",
+    "password",
+    "proxy_authorization",
+    "refresh_token",
+    "secret",
+    "token",
+})
+_SENSITIVE_SUFFIXES = (
+    "_access_token",
+    "_api_key",
+    "_password",
+    "_refresh_token",
+    "_secret",
+)
 
 
 def _validate_count_distribution(
@@ -78,25 +96,7 @@ def _is_sensitive_key(key: str) -> bool:
     normalized = key.lower().replace("-", "_")
     if normalized.endswith("_env"):
         return False
-    exact_sensitive_keys = {
-        "access_token",
-        "api_key",
-        "apikey",
-        "authorization",
-        "password",
-        "proxy_authorization",
-        "refresh_token",
-        "secret",
-        "token",
-    }
-    sensitive_suffixes = (
-        "_access_token",
-        "_api_key",
-        "_password",
-        "_refresh_token",
-        "_secret",
-    )
-    return normalized in exact_sensitive_keys or normalized.endswith(sensitive_suffixes)
+    return normalized in _EXACT_SENSITIVE_KEYS or normalized.endswith(_SENSITIVE_SUFFIXES)
 
 
 def _redact_header_values(value: Any) -> Any:
