@@ -110,7 +110,7 @@ def normalize_file_name(file_name: object) -> list[str]:
     plain string.
 
     Args:
-        file_name: String, list of strings, or other.
+        file_name: String, list of strings, tuple of strings, or other.
 
     Returns:
         List of file-name strings.
@@ -119,10 +119,14 @@ def normalize_file_name(file_name: object) -> list[str]:
         return [file_name]
     if isinstance(file_name, list):
         return file_name
+    if isinstance(file_name, tuple):
+        return list(file_name)
     if hasattr(file_name, "tolist"):
         value = file_name.tolist()
         if isinstance(value, list):
             return value
+        if isinstance(value, tuple):
+            return list(value)
         if isinstance(value, str):
             return [value]
     return [str(file_name)]
@@ -354,13 +358,13 @@ def file_tuple_in_set(file_name: object, file_set: set[tuple[str, ...]]) -> bool
     """Check whether *file_name* (list or str) belongs to *file_set*.
 
     Args:
-        file_name: A list of strings or a single string.
+        file_name: A list/tuple of strings or a single string.
         file_set: Set of tuples to test membership against.
 
     Returns:
         ``True`` when the normalised tuple is in *file_set*.
     """
-    file_tuple = tuple(file_name) if isinstance(file_name, list) else (file_name,)
+    file_tuple = tuple(normalize_file_name(file_name))
     return file_tuple in file_set
 
 
