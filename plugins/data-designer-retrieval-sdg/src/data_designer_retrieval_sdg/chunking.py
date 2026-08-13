@@ -303,6 +303,8 @@ def chunks_to_sections_structured(
     strategy: Literal["sequential", "doc_balanced", "interleaved"] = "sequential",
 ) -> list[str]:
     """Split chunks into sections using the specified strategy."""
+    if num_sections <= 0:
+        raise ValueError("num_sections must be positive")
     if strategy == "doc_balanced":
         return chunks_to_sections_doc_balanced(chunks, num_sections)
     if strategy == "interleaved":
