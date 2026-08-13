@@ -95,6 +95,7 @@ def _is_sensitive_key(key: str) -> bool:
         "_password",
         "_refresh_token",
         "_secret",
+        "_token",
     )
     return normalized in exact_sensitive_keys or normalized.endswith(sensitive_suffixes)
 
