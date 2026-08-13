@@ -1011,6 +1011,12 @@ def run_conversion(
     if not os.path.exists(abs_input):
         raise ValueError(f"Input path does not exist: {abs_input}")
 
+    if split_strategy not in SUPPORTED_SPLIT_STRATEGIES:
+        raise ValueError(
+            f"Unsupported split_strategy: {split_strategy}. "
+            f"Must be one of: {', '.join(sorted(SUPPORTED_SPLIT_STRATEGIES))}"
+        )
+
     output_dir = str(_resolve_conversion_output_dir(input_path, output_dir, eval_only))
     os.makedirs(output_dir, exist_ok=True)
 
@@ -1104,6 +1110,18 @@ def run_conversion(
 # ---------------------------------------------------------------------------
 
 
+SUPPORTED_SPLIT_STRATEGIES = frozenset({"random", "dedupped", "cluster"})
+
+
+def _validate_split_strategy(split_strategy: str) -> None:
+    """Raise a clear error for unsupported split strategies."""
+    if split_strategy not in SUPPORTED_SPLIT_STRATEGIES:
+        raise ValueError(
+            f"Unsupported split_strategy: {split_strategy}. "
+            f"Must be one of: {', '.join(sorted(SUPPORTED_SPLIT_STRATEGIES))}"
+        )
+
+
 def _compute_split(
     filtered_qa_df: pd.DataFrame,
     train_ratio: float,
@@ -1113,6 +1131,8 @@ def _compute_split(
     groups_json: list[str] | None,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """Route to the correct split strategy."""
+    _validate_split_strategy(split_strategy)
+
     if split_strategy == "random":
         return create_train_val_test_split(filtered_qa_df, train_ratio, val_ratio, seed)
 
