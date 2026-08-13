@@ -125,6 +125,9 @@ def run_generation(
     if config.buffer_size <= 0:
         raise ValueError("buffer_size must be greater than zero")
 
+    if config.num_records is not None and config.num_records <= 0:
+        raise ValueError("config.num_records must be greater than zero")
+
     model_providers, _ = build_model_providers(model_providers=config.model_providers)
     config = config.model_copy(update={"model_providers": model_providers})
     dataset_name = _resolve_dataset_name(config.seed_source, config.artifact_path, config.dataset_name)
@@ -198,6 +201,9 @@ def preview_generation(config: GenerationRunConfig, num_records: int = 1) -> Gen
         raise ValueError("buffer_size must be greater than zero")
     if num_records <= 0:
         raise ValueError("num_records must be greater than zero")
+
+    if config.num_records is not None and config.num_records <= 0:
+        raise ValueError("config.num_records must be greater than zero")
 
     model_providers, _ = build_model_providers(model_providers=config.model_providers)
     config = config.model_copy(update={"model_providers": model_providers})
