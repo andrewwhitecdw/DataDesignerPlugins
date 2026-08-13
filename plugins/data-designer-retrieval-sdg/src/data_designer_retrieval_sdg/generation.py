@@ -54,11 +54,7 @@ def _count_seed_records(seed_source: DocumentChunkerSeedSource) -> int:
 
 def _path_is_relative_to(path: Path, root: Path) -> bool:
     """Return whether *path* is contained by *root* after resolution."""
-    try:
-        path.relative_to(root)
-    except ValueError:
-        return False
-    return True
+    return path.is_relative_to(root)
 
 
 def _validate_dataset_name(dataset_name: str, artifact_path: Path) -> str:
