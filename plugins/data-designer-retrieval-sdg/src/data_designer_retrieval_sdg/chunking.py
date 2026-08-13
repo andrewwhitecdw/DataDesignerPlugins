@@ -151,7 +151,8 @@ def build_bundles(
                 candidate = Path(raw_doc)
                 if not candidate.is_absolute() and input_dir:
                     candidate = (input_dir / raw_doc).resolve()
-                candidate = candidate.resolve()
+                else:
+                    candidate = candidate.resolve()
                 if candidate in resolved_paths and candidate not in seen:
                     resolved_bundle.append(candidate)
                     seen.add(candidate)
