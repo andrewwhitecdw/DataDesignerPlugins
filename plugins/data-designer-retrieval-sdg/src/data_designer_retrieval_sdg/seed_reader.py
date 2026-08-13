@@ -137,7 +137,12 @@ class DocumentChunkerSeedReader(FileSystemSeedReader[DocumentChunkerSeedSource])
         matched_paths: list[str],
         context: SeedReaderFileSystemContext,
     ) -> list[dict[str, Any]]:
-        manifest_path = Path(self.source.multi_doc_manifest) if self.source.multi_doc_manifest else None
+        if self.source.multi_doc_manifest:
+            manifest_path = Path(self.source.multi_doc_manifest)
+            if not manifest_path.is_absolute():
+                manifest_path = context.root_path / manifest_path
+        else:
+            manifest_path = None
         manifest_bundles = load_multi_doc_manifest(manifest_path)
 
         absolute_paths = [context.root_path / rel for rel in matched_paths]
