@@ -864,7 +864,7 @@ def generate_eval_set(
                     all_segments_exist = False
                     break
 
-            if not all_segments_exist:
+            if not all_segments_exist or not segment_ids:
                 skipped_queries += 1
                 continue
 
