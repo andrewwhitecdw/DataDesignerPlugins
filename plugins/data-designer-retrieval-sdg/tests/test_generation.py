@@ -51,6 +51,7 @@ class FakeDataDesigner:
         self.model_providers = model_providers
         self.run_config = None
         self.create_calls: list[dict[str, object]] = []
+        self.preview_calls: list[dict[str, object]] = []
         self.result = FakeCreateResult(artifact_path)
         self.instances.append(self)
 
@@ -77,7 +78,7 @@ class FakeDataDesigner:
 
     def preview(self, config_builder: object, *, num_records: int) -> FakeCreateResult:
         """Return a preview result using the same captured fake object."""
-        self.create_calls.append({"config_builder": config_builder, "num_records": num_records})
+        self.preview_calls.append({"config_builder": config_builder, "num_records": num_records})
         return self.result
 
 
@@ -227,6 +228,6 @@ def test_preview_generation_uses_bounded_seed_range(monkeypatch: pytest.MonkeyPa
 
     assert build_calls[0]["start_index"] == 0
     assert build_calls[0]["end_index"] == 19
-    assert FakeDataDesigner.instances[0].create_calls == [{"config_builder": {"builder": "preview"}, "num_records": 1}]
+    assert FakeDataDesigner.instances[0].preview_calls == [{"config_builder": {"builder": "preview"}, "num_records": 1}]
     assert result.num_seed_records == 100
     assert result.num_preview_records == 1
