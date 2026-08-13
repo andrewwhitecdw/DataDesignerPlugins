@@ -172,7 +172,7 @@ def build_bundles(
                 f"Either reduce the bundle size in your manifest or increase max_docs_per_bundle."
             )
 
-    return [b for b in bundles if b]
+    return bundles
 
 
 def group_chunks_by_doc(chunks: list[dict]) -> dict[str, list[dict]]:
