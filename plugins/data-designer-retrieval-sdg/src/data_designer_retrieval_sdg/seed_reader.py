@@ -38,17 +38,22 @@ logger = logging.getLogger(__name__)
 def _path_matches_extensions(relative_path: str, extensions: list[str] | None) -> bool:
     """Return ``True`` when ``relative_path`` passes extension filtering.
 
-    When ``extensions`` is ``None``, no filtering is applied.  A literal
-    empty string ``""`` in the list matches files whose basename contains
-    no dot (i.e. no extension).
+    When ``extensions`` is ``None`` or empty, no filtering is applied.  A
+    literal empty string ``""`` in the list matches files whose basename
+    contains no dot (i.e. no extension).  Extensions may be supplied with
+    or without a leading dot.
     """
     if not extensions:
         return True
-    ext_set = {e.lower() for e in extensions}
-    suffix = PurePosixPath(relative_path).suffix.lower()
+    path = PurePosixPath(relative_path)
+    suffix = path.suffix.lower()
+    ext_set = {
+        e.lower() if e.startswith(".") or e == "" else f".{e.lower()}"
+        for e in extensions
+    }
     if suffix in ext_set:
         return True
-    if "" in ext_set and "." not in PurePosixPath(relative_path).name:
+    if "" in ext_set and "." not in path.name:
         return True
     return False
 
