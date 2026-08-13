@@ -40,15 +40,19 @@ def _path_matches_extensions(relative_path: str, extensions: list[str] | None) -
 
     When ``extensions`` is ``None``, no filtering is applied.  A literal
     empty string ``""`` in the list matches files whose basename contains
-    no dot (i.e. no extension).
+    no dot (i.e. no extension).  An empty list rejects every file because
+    no extensions are permitted.
     """
-    if not extensions:
+    if extensions is None:
         return True
+    if not extensions:
+        return False
     ext_set = {e.lower() for e in extensions}
-    suffix = PurePosixPath(relative_path).suffix.lower()
+    path = PurePosixPath(relative_path)
+    suffix = path.suffix.lower()
     if suffix in ext_set:
         return True
-    if "" in ext_set and "." not in PurePosixPath(relative_path).name:
+    if "" in ext_set and "." not in path.name:
         return True
     return False
 
