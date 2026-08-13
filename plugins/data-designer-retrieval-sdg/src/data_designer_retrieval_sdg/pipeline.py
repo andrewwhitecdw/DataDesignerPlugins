@@ -175,7 +175,7 @@ def build_model_providers(
 
     if model_providers_file is not None:
         raw = model_providers_file.read_text(encoding="utf-8")
-        if model_providers_file.suffix in (".yaml", ".yml"):
+        if model_providers_file.suffix.lower() in (".yaml", ".yml"):
             entries = yaml.safe_load(raw)
         else:
             entries = json.loads(raw)
