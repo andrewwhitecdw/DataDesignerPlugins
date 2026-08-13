@@ -289,7 +289,7 @@ def _extract_qa_pairs(row: pd.Series, file_name: object) -> list | None:
         print(f"Warning: Skipping {file_name} - no qa_generation or deduplicated_qa_pairs found")
         return None
 
-    pairs = _to_list(pairs) if not isinstance(pairs, list) else pairs
+    pairs = _to_list(pairs)
     if not pairs:
         print(f"Warning: Skipping {file_name} - no valid pairs found")
         return None
