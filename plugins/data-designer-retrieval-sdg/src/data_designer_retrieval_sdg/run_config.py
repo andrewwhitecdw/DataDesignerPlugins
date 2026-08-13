@@ -66,7 +66,10 @@ def _validate_count_distribution(
     if actual_keys != expected_keys:
         missing = sorted(expected_keys - actual_keys)
         unexpected = sorted(actual_keys - expected_keys)
-        raise ValueError(f"{name} keys must match the expected set; missing={missing}, unexpected={unexpected}")
+        raise ValueError(
+            f"{name} keys must match the expected set {sorted(expected_keys)}; "
+            f"missing={missing}, unexpected={unexpected}"
+        )
 
     total = sum(counts.values())
     if total != num_pairs:
