@@ -857,6 +857,10 @@ def generate_eval_set(
                 skipped_too_many_pos += 1
                 continue
 
+            if len(segment_ids) == 0:
+                skipped_queries += 1
+                continue
+
             all_segments_exist = True
             for segment_id in segment_ids:
                 key = (file_identifier, segment_id)
