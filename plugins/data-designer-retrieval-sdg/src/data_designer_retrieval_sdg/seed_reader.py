@@ -46,7 +46,7 @@ def _path_matches_extensions(relative_path: str, extensions: list[str] | None) -
         return True
     ext_set = {e.lower() for e in extensions}
     suffix = PurePosixPath(relative_path).suffix.lower()
-    if suffix in ext_set:
+    if suffix in ext_set and suffix != "":
         return True
     if "" in ext_set and "." not in PurePosixPath(relative_path).name:
         return True
