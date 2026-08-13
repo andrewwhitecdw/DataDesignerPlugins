@@ -72,8 +72,11 @@ def filter_mismatched_records(records: list[dict]) -> tuple[list[dict], int]:
             filtered.append(record)
         else:
             dropped_count += 1
-            file_name = record.get("file_name", "unknown")
-            display = file_name if isinstance(file_name, str) else ", ".join(file_name) if file_name else "unknown"
+            raw_file_name = record.get("file_name")
+            if raw_file_name is None:
+                display = "unknown"
+            else:
+                display = ", ".join(str(name) for name in normalize_file_name(raw_file_name))
             print(
                 f"  Dropping record '{display}': "
                 f"qa_evaluations={len(qa_evals)}, deduplicated_qa_pairs={len(dedup_pairs)}"
