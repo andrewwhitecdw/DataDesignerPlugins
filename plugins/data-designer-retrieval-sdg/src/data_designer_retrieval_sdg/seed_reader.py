@@ -126,6 +126,8 @@ class DocumentChunkerSeedReader(FileSystemSeedReader[DocumentChunkerSeedSource])
         is_multi_doc = self.source.multi_doc
 
         if not is_multi_doc:
+            if not members:
+                return []
             record = self._hydrate_single(members[0], context)
             return [record] if record else []
 
