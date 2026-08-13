@@ -174,8 +174,13 @@ def build_model_providers(
         add_provider(provider, "run configuration")
 
     if model_providers_file is not None:
+        suffix = model_providers_file.suffix.lower()
+        if suffix not in (".yaml", ".yml", ".json"):
+            raise ValueError(
+                f"model_providers_file must be .json, .yaml, or .yml, got {model_providers_file.suffix!r}"
+            )
         raw = model_providers_file.read_text(encoding="utf-8")
-        if model_providers_file.suffix in (".yaml", ".yml"):
+        if suffix in (".yaml", ".yml"):
             entries = yaml.safe_load(raw)
         else:
             entries = json.loads(raw)
