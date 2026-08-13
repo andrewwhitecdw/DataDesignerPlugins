@@ -210,7 +210,7 @@ def preview_generation(config: GenerationRunConfig, num_records: int = 1) -> Gen
     config_builder = build_qa_generation_pipeline(
         seed_source=config.seed_source,
         start_index=0,
-        end_index=min(config.buffer_size - 1, total_records - 1),
+        end_index=total_records - 1,
         **config.pipeline.to_pipeline_kwargs(),
     )
     preview_result = data_designer.preview(config_builder, num_records=num_records)
