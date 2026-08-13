@@ -262,13 +262,15 @@ def load_positive_docs_with_modality(
 
 
 def _to_list(value: object) -> list | None:
-    """Coerce *value* to a Python list, handling numpy arrays."""
+    """Coerce *value* to a Python list, handling numpy arrays and tuples."""
     if value is None:
         return None
     if isinstance(value, np.ndarray):
         return value.tolist()
     if isinstance(value, list):
         return value
+    if isinstance(value, tuple):
+        return list(value)
     return None
 
 
