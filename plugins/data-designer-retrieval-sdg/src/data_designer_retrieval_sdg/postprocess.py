@@ -45,11 +45,11 @@ def postprocess_retriever_data(
     query_types: list[str] = []
 
     for _, row in generated_df.iterrows():
-        if "file_name" not in row:
+        file_name = row.get("file_name")
+        if pd.isna(file_name):
             print("Warning: Skipping row without file_name")
             continue
 
-        file_name = row["file_name"]
         qa_pairs = _extract_qa_pairs(row, file_name)
         if qa_pairs is None:
             continue
