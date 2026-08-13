@@ -98,6 +98,12 @@ def _producer_version() -> str:
         return "0+unknown"
 
 
+def _validate_buffer_size(buffer_size: int) -> None:
+    """Raise if the buffer size is not a positive integer."""
+    if buffer_size <= 0:
+        raise ValueError("buffer_size must be greater than zero")
+
+
 def run_generation(
     config: GenerationRunConfig,
     *,
@@ -122,8 +128,7 @@ def run_generation(
         ValueError: If the dataset name, record count, or run settings are
             invalid.
     """
-    if config.buffer_size <= 0:
-        raise ValueError("buffer_size must be greater than zero")
+    _validate_buffer_size(config.buffer_size)
 
     model_providers, _ = build_model_providers(model_providers=config.model_providers)
     config = config.model_copy(update={"model_providers": model_providers})
@@ -194,8 +199,7 @@ def preview_generation(config: GenerationRunConfig, num_records: int = 1) -> Gen
         SeedReaderError: If the seed source cannot produce a manifest.
         ValueError: If the requested preview or run settings are invalid.
     """
-    if config.buffer_size <= 0:
-        raise ValueError("buffer_size must be greater than zero")
+    _validate_buffer_size(config.buffer_size)
     if num_records <= 0:
         raise ValueError("num_records must be greater than zero")
 
