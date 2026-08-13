@@ -1116,6 +1116,11 @@ def _compute_split(
     if split_strategy == "random":
         return create_train_val_test_split(filtered_qa_df, train_ratio, val_ratio, seed)
 
+    if split_strategy not in {"dedupped", "cluster"}:
+        raise ValueError(
+            f"Unknown split_strategy {split_strategy!r}; must be one of 'random', 'dedupped', 'cluster'"
+        )
+
     if not groups_json:
         raise ValueError(f"--groups-json is required when split_strategy={split_strategy}")
 
