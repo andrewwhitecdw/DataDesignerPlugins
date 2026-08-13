@@ -78,6 +78,8 @@ _GENERATION_CLI_SHORTCUTS = {
 def _parse_count_entry(value: str) -> tuple[str, int]:
     """Parse one ``NAME=COUNT`` question-distribution entry."""
     name, separator, raw_count = value.partition("=")
+    name = name.strip()
+    raw_count = raw_count.strip()
     if not separator or not name or not raw_count:
         raise argparse.ArgumentTypeError("expected NAME=COUNT")
     try:
