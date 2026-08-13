@@ -146,7 +146,7 @@ def filter_qa_pairs_by_quality(
 
         for pair_idx, qa_pair in enumerate(dedup_pairs):
             total_pairs += 1
-            quality_score = scores[pair_idx] if pair_idx < len(scores) else 0
+            quality_score = scores[pair_idx]
             if quality_score >= quality_threshold:
                 pair_dict = _qa_pair_to_dict(qa_pair)
                 pair_dict["file_name"] = file_name
