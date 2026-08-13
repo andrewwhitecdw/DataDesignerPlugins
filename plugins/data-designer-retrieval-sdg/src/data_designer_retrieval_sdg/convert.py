@@ -646,7 +646,9 @@ def create_group_aware_split(
     split_assignments: dict[str, set[tuple[str, ...]]] = {"train": set(), "val": set(), "test": set()}
 
     for _, file_tuples, weight in units:
-        deficits = {s: targets[s] - current[s] for s in targets}
+        deficits = {s: targets[s] - current[s] for s in targets if targets[s] > 0}
+        if not deficits:
+            break
         best_split = max(deficits, key=deficits.get)  # type: ignore[arg-type]
         for ft in file_tuples:
             split_assignments[best_split].add(ft)
