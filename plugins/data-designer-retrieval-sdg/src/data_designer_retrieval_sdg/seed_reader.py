@@ -42,7 +42,7 @@ def _path_matches_extensions(relative_path: str, extensions: list[str] | None) -
     empty string ``""`` in the list matches files whose basename contains
     no dot (i.e. no extension).
     """
-    if not extensions:
+    if extensions is None:
         return True
     ext_set = {e.lower() for e in extensions}
     suffix = PurePosixPath(relative_path).suffix.lower()
